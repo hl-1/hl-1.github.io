@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hello World</title>
+    <url>/2026/06/25/Hello-World-0/</url>
+    <content><![CDATA[入机1号，正式启航 🚀这是我的第一篇博客文章，标志着我个人技术博客的正式上线。
+技术栈本站使用以下技术搭建：
+
+Hexo - 快速、简洁的静态博客框架
+Butterfly - 美观大方的 Hexo 主题
+GitHub Pages - 免费静态网站托管
+
+计划后续会陆续分享更多技术文章，敬请期待！
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Blog</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo 博客日常操作指南（增删改 + 图片）</title>
     <url>/2026/06/25/hexo-%E5%8D%9A%E5%AE%A2%E6%97%A5%E5%B8%B8%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/</url>
     <content><![CDATA[Hexo 博客日常操作指南⚠️ 前置说明所有命令都在 Windows 本地 cmd 中执行。打开方式：Win + R → cmd → 回车。
@@ -247,6 +264,126 @@ url: https://hl-1.github.iodeploy:  type: git  repo: https://github.com/hl-1/hl-
 
 部署成功后，等待 1-2 分钟，访问 https://hl-1.github.io 即可看到博客。
 
+第七步：配置 Giscus 评论系统Giscus 是一款基于 GitHub Discussions 的评论系统，免费、无广告、数据归你自己所有。
+为什么选 Giscus？
+
+
+评论系统
+特点
+是否免费
+
+
+
+Giscus
+GitHub Discussions 驱动，数据在仓库里
+✅ 免费
+
+
+Gitalk
+GitHub Issues 驱动，需创建 OAuth App
+✅ 免费
+
+
+Twikoo
+腾讯云开发驱动，国内访问快
+需云服务
+
+
+Waline
+功能全面，需单独部署后端
+需服务器
+
+
+Disqus
+老牌评论系统
+免费版有广告
+
+
+对于已经用了 GitHub Pages 的博客，Giscus 是最省心的选择——不需要额外注册任何服务。
+前置条件
+开启 GitHub Discussions
+访问仓库 Settings 页面：https://github.com/&lt;用户名&gt;/&lt;用户名&gt;.github.io/settings
+向下滚动找到 Features 区域，勾选 Discussions。
+
+注意： Discussions 默认是关闭的，需要手动开启。
+
+
+安装 Giscus App
+访问 https://github.com/apps/giscus → 点击 Install → 选择 Only select repositories → 勾选你的博客仓库 → 点击 Install 确认。
+
+Giscus App 是 GitHub 官方认证的开源应用，它只读取&#x2F;写入你指定的仓库的 Discussions，不会碰其他仓库。
+
+
+
+获取配置参数
+打开 https://giscus.app/zh-CN
+填入仓库名（如 hl-1/hl-1.github.io）
+页面会自动识别出以下信息：
+
+
+
+
+参数
+含义
+示例值
+
+
+
+data-repo
+仓库全名
+hl-1/hl-1.github.io
+
+
+data-repo-id
+仓库唯一 ID
+R_kgDOTDtHFQ
+
+
+data-category
+Discussions 分类
+General
+
+
+data-category-id
+分类唯一 ID
+DIC_kwDOTDtHFc4C_12D
+
+
+⚠️ 分类选择陷阱Discussion 分类有权限区别：
+
+
+
+分类类型
+权限
+适合评论吗
+
+
+
+Announcements（公告）
+仅管理员可发帖
+❌ 不适合
+
+
+General（一般）
+所有人可发帖&#x2F;回复
+✅ 适合
+
+
+务必选择 General，否则除了你自己，其他人无法评论。
+写入主题配置编辑 _config.butterfly.yml，找到 Comments 区域，修改两处：
+启用评论系统：
+comments:  use: Giscus    # ← 填入 Giscus  text: true     # 显示评论系统名称在按钮旁
+
+填入 Giscus 参数：
+giscus:  repo: hl-1/hl-1.github.io        # ← 仓库名  repo_id: R_kgDOTDtHFQ            # ← 仓库 ID  category_id: DIC_kwDOTDtHFc4C_12D  # ← 分类 ID（General）  light_theme: light  dark_theme: dark
+
+验证效果# 部署上线npm run clean &amp;&amp; npm run deploy
+
+部署后访问博客，打开任意一篇文章，滚动到底部即可看到 Giscus 评论框。用 GitHub 账号登录后就能评论。
+
+提示： 本地 localhost:4000 无法使用 Giscus 评论（GitHub 不信任 localhost 域名），这是正常的。部署到线上后评论功能才生效。
+
+
 项目目录结构C:\workDoc\blog\├── _config.yml              # Hexo 主配置（站点信息、URL、部署等）├── _config.butterfly.yml    # Butterfly 主题配置（外观、导航、插件等）├── node_modules/            # 依赖包（不要手动修改）├── package.json             # 项目依赖声明├── scaffolds/               # 文章模板├── source/                  # 核心目录│   ├── _posts/              # 📝 所有文章放这里│   └── about/               # 👤 关于页面├── themes/                  # 主题文件│   └── butterfly/├── public/                  # 生成的静态文件（hexo generate 后产生）└── .deploy_git/             # 部署用临时 git 仓库（自动管理）
 
 
@@ -327,23 +464,6 @@ Deploy → hexo deploy 推上线
         <tag>教程</tag>
         <tag>GitHub Pages</tag>
         <tag>Butterfly</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2026/06/25/Hello-World-0/</url>
-    <content><![CDATA[入机1号，正式启航 🚀这是我的第一篇博客文章，标志着我个人技术博客的正式上线。
-技术栈本站使用以下技术搭建：
-
-Hexo - 快速、简洁的静态博客框架
-Butterfly - 美观大方的 Hexo 主题
-GitHub Pages - 免费静态网站托管
-
-计划后续会陆续分享更多技术文章，敬请期待！
-]]></content>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>Blog</tag>
       </tags>
   </entry>
 </search>
