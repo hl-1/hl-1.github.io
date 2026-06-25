@@ -18,6 +18,111 @@ GitHub Pages - 免费静态网站托管
       </tags>
   </entry>
   <entry>
+    <title>Hexo 博客日常操作指南（增删改 + 图片）</title>
+    <url>/2026/06/25/hexo-%E5%8D%9A%E5%AE%A2%E6%97%A5%E5%B8%B8%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[Hexo 博客日常操作指南⚠️ 前置说明所有命令都在 Windows 本地 cmd 中执行。打开方式：Win + R → cmd → 回车。
+# 所有操作前先进入博客目录cd C:\workDoc\blog
+
+
+一、上传新文章到博客步骤# ① 新建文章（自动生成 md 文件）npx hexo new &quot;文章标题&quot;# ② 文件位置：source\_posts\文章标题.md#    用任意编辑器打开，写 Markdown 内容# ③ 部署上线npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy
+
+示例npx hexo new &quot;我的学习笔记&quot;# → 生成 source\_posts\我的学习笔记.md# → 编辑内容...npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy# → 1-2 分钟后在 https://hl-1.github.io 可见
+
+
+二、修改已发布的文章# ① 找到要改的文章，用编辑器打开notepad &quot;source\_posts\文章标题.md&quot;# ② 改内容（增删改都可以）# ③ 重新部署npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy
+
+不需要额外操作，重新部署后旧内容自动被新内容覆盖。
+
+三、下架&#x2F;删除已发布的文章# ① 删除源文件del &quot;source\_posts\文章标题.md&quot;# ② 重新部署（文章即从网站消失）npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy
+
+
+注意： 文件删了就无法恢复，谨慎操作。
+
+
+四、暂时隐藏文章（不下架）编辑文章头部信息，加一行 published: false：
+---title: 文章标题date: 2026-06-25 10:00:00published: false    # ← 设为 falsetags: [Hexo]---
+
+然后正常部署。文章文件保留，但网站上不显示。
+要重新上线，改回 true 再部署一次就行。
+
+五、上传带图片的文章5.1 建立图片目录# 只需执行一次，创建统一图片存放目录mkdir source\images
+
+5.2 截图保存Win + Shift + S  →  框选截取区域        ↓打开画图或其他工具保存到 source\images\
+
+5.3 在文章中引用图片正文内容...![](/images/我的截图.png)继续正文...
+
+5.4 部署npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy
+
+图片会随文章一起上传到 GitHub Pages，访问时正常显示。
+
+命令速查表
+
+
+操作
+命令
+
+
+
+新建文章
+npx hexo new &quot;标题&quot;
+
+
+本地预览
+npx hexo server
+
+
+构建 + 部署
+npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy
+
+
+隐藏文章
+头部加 published: false
+
+
+删除文章
+del &quot;source\_posts\文章.md&quot; + 部署
+
+
+
+文件位置速查
+
+
+内容
+路径
+
+
+
+所有文章
+C:\workDoc\blog\source\_posts\
+
+
+图片资源
+C:\workDoc\blog\source\images\
+
+
+站点配置
+C:\workDoc\blog\_config.yml
+
+
+主题配置
+C:\workDoc\blog\_config.butterfly.yml
+
+
+
+典型工作流① 打开 cmd → cd C:\workDoc\blog② npx hexo new &quot;新文章&quot;              （创建）③ 编辑 source\_posts\新文章.md        （写内容）④ npx hexo server                    （本地预览看效果）⑤ npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy  （上线）
+
+
+最后更新：2026-06-25
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）</title>
     <url>/2026/06/25/hexo-blog-github-pages-%E6%90%AD%E5%BB%BA%E5%85%A8%E6%8C%87%E5%8D%97/</url>
     <content><![CDATA[Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）概述本指南记录从零开始搭建 Hexo 静态博客并部署到 GitHub Pages 的完整过程，附带所有遇到的问题与解决方案。
@@ -236,114 +341,9 @@ Deploy → hexo deploy 推上线
       </categories>
       <tags>
         <tag>Hexo</tag>
+        <tag>教程</tag>
         <tag>GitHub Pages</tag>
         <tag>Butterfly</tag>
-        <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hexo 博客日常操作指南（增删改 + 图片）</title>
-    <url>/2026/06/25/hexo-%E5%8D%9A%E5%AE%A2%E6%97%A5%E5%B8%B8%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[Hexo 博客日常操作指南⚠️ 前置说明所有命令都在 Windows 本地 cmd 中执行。打开方式：Win + R → cmd → 回车。
-# 所有操作前先进入博客目录cd C:\workDoc\blog
-
-
-一、上传新文章到博客步骤# ① 新建文章（自动生成 md 文件）npx hexo new &quot;文章标题&quot;# ② 文件位置：source\_posts\文章标题.md#    用任意编辑器打开，写 Markdown 内容# ③ 部署上线npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy
-
-示例npx hexo new &quot;我的学习笔记&quot;# → 生成 source\_posts\我的学习笔记.md# → 编辑内容...npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy# → 1-2 分钟后在 https://hl-1.github.io 可见
-
-
-二、修改已发布的文章# ① 找到要改的文章，用编辑器打开notepad &quot;source\_posts\文章标题.md&quot;# ② 改内容（增删改都可以）# ③ 重新部署npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy
-
-不需要额外操作，重新部署后旧内容自动被新内容覆盖。
-
-三、下架&#x2F;删除已发布的文章# ① 删除源文件del &quot;source\_posts\文章标题.md&quot;# ② 重新部署（文章即从网站消失）npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy
-
-
-注意： 文件删了就无法恢复，谨慎操作。
-
-
-四、暂时隐藏文章（不下架）编辑文章头部信息，加一行 published: false：
----title: 文章标题date: 2026-06-25 10:00:00published: false    # ← 设为 falsetags: [Hexo]---
-
-然后正常部署。文章文件保留，但网站上不显示。
-要重新上线，改回 true 再部署一次就行。
-
-五、上传带图片的文章5.1 建立图片目录# 只需执行一次，创建统一图片存放目录mkdir source\images
-
-5.2 截图保存Win + Shift + S  →  框选截取区域        ↓打开画图或其他工具保存到 source\images\
-
-5.3 在文章中引用图片正文内容...![](/images/我的截图.png)继续正文...
-
-5.4 部署npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy
-
-图片会随文章一起上传到 GitHub Pages，访问时正常显示。
-
-命令速查表
-
-
-操作
-命令
-
-
-
-新建文章
-npx hexo new &quot;标题&quot;
-
-
-本地预览
-npx hexo server
-
-
-构建 + 部署
-npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy
-
-
-隐藏文章
-头部加 published: false
-
-
-删除文章
-del &quot;source\_posts\文章.md&quot; + 部署
-
-
-
-文件位置速查
-
-
-内容
-路径
-
-
-
-所有文章
-C:\workDoc\blog\source\_posts\
-
-
-图片资源
-C:\workDoc\blog\source\images\
-
-
-站点配置
-C:\workDoc\blog\_config.yml
-
-
-主题配置
-C:\workDoc\blog\_config.butterfly.yml
-
-
-
-典型工作流① 打开 cmd → cd C:\workDoc\blog② npx hexo new &quot;新文章&quot;              （创建）③ 编辑 source\_posts\新文章.md        （写内容）④ npx hexo server                    （本地预览看效果）⑤ npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy  （上线）
-
-
-最后更新：2026-06-25
-]]></content>
-      <categories>
-        <category>教程</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>教程</tag>
       </tags>
   </entry>
 </search>
