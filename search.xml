@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2026/06/25/Hello-World-0/</url>
-    <content><![CDATA[入机1号，正式启航 🚀这是我的第一篇博客文章，标志着我个人技术博客的正式上线。
-技术栈本站使用以下技术搭建：
-
-Hexo - 快速、简洁的静态博客框架
-Butterfly - 美观大方的 Hexo 主题
-GitHub Pages - 免费静态网站托管
-
-计划后续会陆续分享更多技术文章，敬请期待！
-]]></content>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>Blog</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hexo 博客日常操作指南（增删改 + 图片）</title>
     <url>/2026/06/25/hexo-%E5%8D%9A%E5%AE%A2%E6%97%A5%E5%B8%B8%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/</url>
     <content><![CDATA[Hexo 博客日常操作指南⚠️ 前置说明所有命令都在 Windows 本地 cmd 中执行。打开方式：Win + R → cmd → 回车。
@@ -344,6 +327,23 @@ Deploy → hexo deploy 推上线
         <tag>教程</tag>
         <tag>GitHub Pages</tag>
         <tag>Butterfly</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2026/06/25/Hello-World-0/</url>
+    <content><![CDATA[入机1号，正式启航 🚀这是我的第一篇博客文章，标志着我个人技术博客的正式上线。
+技术栈本站使用以下技术搭建：
+
+Hexo - 快速、简洁的静态博客框架
+Butterfly - 美观大方的 Hexo 主题
+GitHub Pages - 免费静态网站托管
+
+计划后续会陆续分享更多技术文章，敬请期待！
+]]></content>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>Blog</tag>
       </tags>
   </entry>
 </search>
