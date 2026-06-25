@@ -123,6 +123,223 @@ C:\workDoc\blog\_config.butterfly.yml
       </tags>
   </entry>
   <entry>
+    <title>Hexo 个人博客迁移指南（换设备 / 重装系统）</title>
+    <url>/2026/06/25/hexo-blog-%E8%BF%81%E7%A7%BB%E6%8C%87%E5%8D%97/</url>
+    <content><![CDATA[Hexo 个人博客迁移指南（换设备 &#x2F; 重装系统）概述当你换了新电脑、重装系统，或者想在多台设备上维护同一个博客时，不需要从头搭建。Hexo 博客的迁移非常简单——只需复制源代码文件，在新设备上 npm install 即可恢复。
+
+适用场景： 换电脑、重装系统、多设备同步
+难度： 低
+耗时： 10 分钟
+
+
+一、迁移原理Hexo 博客由两类文件组成：
+
+
+
+类型
+文件
+说明
+
+
+
+源文件（需要迁移）
+配置、文章、图片等
+你手动写的，不可自动生成
+
+
+生成文件（不需要迁移）
+node_modules、public、.deploy_git
+执行命令自动生成
+
+
+源文件通常只有几百 KB，打包很快。生成文件可能几百 MB，完全没必要搬。
+
+二、需要打包的文件C:\workDoc\blog\├── _config.yml                           # ✅ Hexo 主配置├── _config.butterfly.yml                 # ✅ Butterfly 主题配置├── package.json                          # ✅ 依赖声明（重要！）├── package-lock.json                     # ✅ 依赖版本锁定├── .gitignore                            # ✅ Git 忽略规则├── scaffolds\                            # ✅ 文章模板│   ├── draft.md│   ├── page.md│   └── post.md└── source\                               # ✅ 所有内容    ├── _posts\                           #    全部文章    ├── about\                            #    关于页面    ├── categories\                       #    分类页面    ├── tags\                             #    标签页面    └── img\                              #    图片资源
+
+不需要打包的（到新设备自动生成）：
+node_modules\          # npm install 生成（几百 MB）public\                # hexo generate 生成.deploy_git\           # hexo deploy 自动管理db.json                # hexo 自动生成
+
+打包方式方式一：直接复制粘贴（推荐，最简单）
+直接用 U 盘或网盘把 C:\workDoc\blog\ 整个文件夹拷过去。到了新设备后删掉 node_modules 和 public 即可。
+方式二：用 Git（如果有自己的仓库）
+在 C:\workDoc\blog\ 初始化 git 并推送到私有仓库，新设备 clone 下来。
+
+三、新设备环境准备1. 安装 Node.js访问 https://nodejs.org 下载 LTS 版本并安装。
+
+版本建议： 推荐 v22 LTS，兼容性最好。v26 也可以，但部分旧插件可能有问题。
+
+安装后验证：
+node -v     # 应输出 v22.x.x 或 v26.x.xnpm -v      # 应输出 10.x.x 或更高
+
+2. 安装 Git访问 https://git-scm.com 下载并安装。
+git -v      # 验证安装
+
+3. 配置 Git 用户信息git config --global user.name &quot;你的 GitHub 用户名&quot;git config --global user.email &quot;你的 GitHub 邮箱&quot;
+
+4. 配置 npm 镜像（国内用户）npm config set registry https://registry.npmmirror.com
+
+这步很重要，否则 npm install 可能非常慢甚至失败。
+
+四、恢复博客第 1 步：放置文件将打包的博客文件夹放到新设备，建议保持原路径避免混淆：
+C:\workDoc\blog\
+
+第 2 步：安装依赖cd C:\workDoc\blognpm install
+
+
+如果报错，参考文末「常见问题」部分。
+
+第 3 步：验证恢复成功npm run server
+
+浏览器打开 http://localhost:4000，检查以下内容：
+
+ 首页能正常显示
+ 文章列表正确
+ 图片加载正常
+ About &#x2F; Categories &#x2F; Tags 页面正常
+ 搜索功能正常
+
+第 4 步：部署测试npm run clean &amp;&amp; npm run deploy
+
+如果部署成功，说明 Git 和 GitHub 认证都没问题。
+
+五、SSH Key 配置（可选）如果你用 SSH 方式连接 GitHub，新设备需要重新生成 SSH Key：
+生成新的 SSH Keyssh-keygen -t ed25519 -C &quot;你的 GitHub 邮箱&quot;# 一路回车，使用默认路径
+
+复制公钥cat ~/.ssh/id_ed25519.pub
+
+添加到 GitHub
+打开 https://github.com/settings/keys
+点击 New SSH Key
+粘贴公钥内容
+保存
+
+验证ssh -T git@github.com# 应输出: Hi xxx! You&#x27;ve successfully authenticated...
+
+
+六、npm 环境配置说明npm 的配置通过 .npmrc 文件管理，位置在用户目录下：
+# C:\Users\&lt;用户名&gt;\.npmrcregistry=https://registry.npmmirror.comprefix=C:\Users\&lt;用户名&gt;\.npm_globalcache=C:\Users\&lt;用户名&gt;\.npm_cache
+
+
+
+
+配置项
+含义
+建议值
+
+
+
+registry
+包下载源
+国内用 https://registry.npmmirror.com
+
+
+prefix
+全局包安装位置
+默认即可
+
+
+cache
+缓存目录
+默认即可
+
+
+新设备上执行一条命令即可完成配置：
+npm config set registry https://registry.npmmirror.com
+
+
+七、完整环境检查清单
+
+
+检查项
+命令
+预期结果
+
+
+
+Node.js 已安装
+node -v
+v22.x.x 或 v26.x.x
+
+
+npm 已安装
+npm -v
+10.x.x 或更高
+
+
+Git 已安装
+git -v
+2.x.x
+
+
+Git 用户已配置
+git config --global user.name
+输出你的用户名
+
+
+npm 镜像已配置
+npm config get registry
+https://registry.npmmirror.com
+
+
+博客目录存在
+ls C:\workDoc\blog
+显示配置文件
+
+
+依赖已安装
+ls C:\workDoc\blog\node_modules
+有内容
+
+
+本地预览正常
+npm run server
+http://localhost:4000 可访问
+
+
+部署正常
+npm run deploy
+推送成功
+
+
+
+八、常见问题Q1: npm install 报错# 清缓存重试npm cache clean --forcerm -rf node_modulesnpm install
+
+Q2: 部署时提示认证失败检查 Git 用户配置：
+git config --global user.namegit config --global user.email
+
+如果使用 HTTPS 推送，可能需要重新登录 GitHub。
+Q3: 端口 4000 被占用npx hexo server -p 4001   # 换个端口
+
+Q4: 图片、头像不显示检查 _config.butterfly.yml 中的图片路径是否以 /img/ 开头：
+avatar:  img: /img/OIP.jpg      # ✅ 正确（/开头）# img: OIP.jpg           # ❌ 错误（缺少/开头）
+
+Q5: Giscus 评论不显示正常现象。Giscus 只在 hl-1.github.io 域名下工作，本地 localhost 不支持。部署到线上就能看到。
+
+九、迁移文件清单（照单打包）直接复制这个列表，打包时逐一核对：
+☐ _config.yml☐ _config.butterfly.yml☐ package.json☐ package-lock.json☐ .gitignore☐ scaffolds/draft.md☐ scaffolds/page.md☐ scaffolds/post.md☐ source/_posts/*.md          （所有文章）☐ source/about/index.md☐ source/categories/index.md☐ source/tags/index.md☐ source/img/*                 （所有图片）
+
+
+总结迁移的本质就三步：
+
+打包源文件 → 几百 KB，几秒钟
+新设备装 Node.js + Git → 一次性操作
+npm install + npm run deploy → 两条命令恢复
+
+数据（文章评论、GitHub 仓库、部署历史）都在 GitHub 云端，不会因为换设备而丢失。
+
+最后更新：2026-06-25
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>教程</tag>
+        <tag>迁移</tag>
+        <tag>环境配置</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）</title>
     <url>/2026/06/25/hexo-blog-github-pages-%E6%90%AD%E5%BB%BA%E5%85%A8%E6%8C%87%E5%8D%97/</url>
     <content><![CDATA[Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）概述本指南记录从零开始搭建 Hexo 静态博客并部署到 GitHub Pages 的完整过程，附带所有遇到的问题与解决方案。

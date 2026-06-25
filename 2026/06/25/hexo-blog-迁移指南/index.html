@@ -1,0 +1,443 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hexo 个人博客迁移指南（换设备 / 重装系统） | 入机1号</title><meta name="author" content="入机"><meta name="copyright" content="入机"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Hexo 个人博客迁移指南（换设备 &#x2F; 重装系统）概述当你换了新电脑、重装系统，或者想在多台设备上维护同一个博客时，不需要从头搭建。Hexo 博客的迁移非常简单——只需复制源代码文件，在新设备上 npm install 即可恢复。  适用场景： 换电脑、重装系统、多设备同步 难度： 低 耗时： 10 分钟   一、迁移原理Hexo 博客由两类文件组成：    类型 文件 说明    源文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo 个人博客迁移指南（换设备 &#x2F; 重装系统）">
+<meta property="og:url" content="https://hl-1.github.io/2026/06/25/hexo-blog-%E8%BF%81%E7%A7%BB%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="入机1号">
+<meta property="og:description" content="Hexo 个人博客迁移指南（换设备 &#x2F; 重装系统）概述当你换了新电脑、重装系统，或者想在多台设备上维护同一个博客时，不需要从头搭建。Hexo 博客的迁移非常简单——只需复制源代码文件，在新设备上 npm install 即可恢复。  适用场景： 换电脑、重装系统、多设备同步 难度： 低 耗时： 10 分钟   一、迁移原理Hexo 博客由两类文件组成：    类型 文件 说明    源文">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://hl-1.github.io/img/OIP.jpg">
+<meta property="article:published_time" content="2026-06-25T04:15:00.000Z">
+<meta property="article:modified_time" content="2026-06-25T04:41:13.987Z">
+<meta property="article:author" content="入机">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="教程">
+<meta property="article:tag" content="环境配置">
+<meta property="article:tag" content="迁移">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hl-1.github.io/img/OIP.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Hexo 个人博客迁移指南（换设备 / 重装系统）",
+  "url": "https://hl-1.github.io/2026/06/25/hexo-blog-%E8%BF%81%E7%A7%BB%E6%8C%87%E5%8D%97/",
+  "image": "https://hl-1.github.io/img/OIP.jpg",
+  "datePublished": "2026-06-25T04:15:00.000Z",
+  "dateModified": "2026-06-25T04:41:13.987Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "入机",
+      "url": "https://hl-1.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.svg"><link rel="canonical" href="https://hl-1.github.io/2026/06/25/hexo-blog-%E8%BF%81%E7%A7%BB%E6%8C%87%E5%8D%97/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.5"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hexo 个人博客迁移指南（换设备 / 重装系统）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/OIP.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">入机1号</span></a><a class="nav-page-title" href="/"><span class="site-name">Hexo 个人博客迁移指南（换设备 / 重装系统）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Hexo 个人博客迁移指南（换设备 / 重装系统）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-25T04:15:00.000Z" title="发表于 2026-06-25 12:15:00">2026-06-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-25T04:41:13.987Z" title="更新于 2026-06-25 12:41:13">2026-06-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%99%E7%A8%8B/">教程</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Hexo-个人博客迁移指南（换设备-重装系统）"><a href="#Hexo-个人博客迁移指南（换设备-重装系统）" class="headerlink" title="Hexo 个人博客迁移指南（换设备 &#x2F; 重装系统）"></a>Hexo 个人博客迁移指南（换设备 &#x2F; 重装系统）</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>当你换了新电脑、重装系统，或者想在多台设备上维护同一个博客时，不需要从头搭建。Hexo 博客的迁移非常简单——只需复制源代码文件，在新设备上 <code>npm install</code> 即可恢复。</p>
+<ul>
+<li><strong>适用场景：</strong> 换电脑、重装系统、多设备同步</li>
+<li><strong>难度：</strong> 低</li>
+<li><strong>耗时：</strong> 10 分钟</li>
+</ul>
+<hr>
+<h2 id="一、迁移原理"><a href="#一、迁移原理" class="headerlink" title="一、迁移原理"></a>一、迁移原理</h2><p>Hexo 博客由两类文件组成：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>源文件（需要迁移）</strong></td>
+<td>配置、文章、图片等</td>
+<td>你手动写的，不可自动生成</td>
+</tr>
+<tr>
+<td><strong>生成文件（不需要迁移）</strong></td>
+<td>node_modules、public、.deploy_git</td>
+<td>执行命令自动生成</td>
+</tr>
+</tbody></table>
+<p>源文件通常只有几百 KB，打包很快。生成文件可能几百 MB，完全没必要搬。</p>
+<hr>
+<h2 id="二、需要打包的文件"><a href="#二、需要打包的文件" class="headerlink" title="二、需要打包的文件"></a>二、需要打包的文件</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">C:\workDoc\blog\</span><br><span class="line">├── _config.yml                           # ✅ Hexo 主配置</span><br><span class="line">├── _config.butterfly.yml                 # ✅ Butterfly 主题配置</span><br><span class="line">├── package.json                          # ✅ 依赖声明（重要！）</span><br><span class="line">├── package-lock.json                     # ✅ 依赖版本锁定</span><br><span class="line">├── .gitignore                            # ✅ Git 忽略规则</span><br><span class="line">├── scaffolds\                            # ✅ 文章模板</span><br><span class="line">│   ├── draft.md</span><br><span class="line">│   ├── page.md</span><br><span class="line">│   └── post.md</span><br><span class="line">└── source\                               # ✅ 所有内容</span><br><span class="line">    ├── _posts\                           #    全部文章</span><br><span class="line">    ├── about\                            #    关于页面</span><br><span class="line">    ├── categories\                       #    分类页面</span><br><span class="line">    ├── tags\                             #    标签页面</span><br><span class="line">    └── img\                              #    图片资源</span><br></pre></td></tr></table></figure>
+
+<p><strong>不需要打包的（到新设备自动生成）：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">node_modules\          # npm install 生成（几百 MB）</span><br><span class="line">public\                # hexo generate 生成</span><br><span class="line">.deploy_git\           # hexo deploy 自动管理</span><br><span class="line">db.json                # hexo 自动生成</span><br></pre></td></tr></table></figure>
+
+<h3 id="打包方式"><a href="#打包方式" class="headerlink" title="打包方式"></a>打包方式</h3><p><strong>方式一：直接复制粘贴（推荐，最简单）</strong></p>
+<p>直接用 U 盘或网盘把 <code>C:\workDoc\blog\</code> 整个文件夹拷过去。到了新设备后删掉 <code>node_modules</code> 和 <code>public</code> 即可。</p>
+<p><strong>方式二：用 Git（如果有自己的仓库）</strong></p>
+<p>在 <code>C:\workDoc\blog\</code> 初始化 git 并推送到私有仓库，新设备 clone 下来。</p>
+<hr>
+<h2 id="三、新设备环境准备"><a href="#三、新设备环境准备" class="headerlink" title="三、新设备环境准备"></a>三、新设备环境准备</h2><h3 id="1-安装-Node-js"><a href="#1-安装-Node-js" class="headerlink" title="1. 安装 Node.js"></a>1. 安装 Node.js</h3><p>访问 <a target="_blank" rel="noopener" href="https://nodejs.org/">https://nodejs.org</a> 下载 LTS 版本并安装。</p>
+<blockquote>
+<p><strong>版本建议：</strong> 推荐 v22 LTS，兼容性最好。v26 也可以，但部分旧插件可能有问题。</p>
+</blockquote>
+<p>安装后验证：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node -v     <span class="comment"># 应输出 v22.x.x 或 v26.x.x</span></span><br><span class="line">npm -v      <span class="comment"># 应输出 10.x.x 或更高</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-安装-Git"><a href="#2-安装-Git" class="headerlink" title="2. 安装 Git"></a>2. 安装 Git</h3><p>访问 <a target="_blank" rel="noopener" href="https://git-scm.com/">https://git-scm.com</a> 下载并安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git -v      <span class="comment"># 验证安装</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-配置-Git-用户信息"><a href="#3-配置-Git-用户信息" class="headerlink" title="3. 配置 Git 用户信息"></a>3. 配置 Git 用户信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;你的 GitHub 用户名&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;你的 GitHub 邮箱&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-配置-npm-镜像（国内用户）"><a href="#4-配置-npm-镜像（国内用户）" class="headerlink" title="4. 配置 npm 镜像（国内用户）"></a>4. 配置 npm 镜像（国内用户）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npmmirror.com</span><br></pre></td></tr></table></figure>
+
+<p>这步很重要，否则 <code>npm install</code> 可能非常慢甚至失败。</p>
+<hr>
+<h2 id="四、恢复博客"><a href="#四、恢复博客" class="headerlink" title="四、恢复博客"></a>四、恢复博客</h2><h3 id="第-1-步：放置文件"><a href="#第-1-步：放置文件" class="headerlink" title="第 1 步：放置文件"></a>第 1 步：放置文件</h3><p>将打包的博客文件夹放到新设备，建议保持原路径避免混淆：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\workDoc\blog\</span><br></pre></td></tr></table></figure>
+
+<h3 id="第-2-步：安装依赖"><a href="#第-2-步：安装依赖" class="headerlink" title="第 2 步：安装依赖"></a>第 2 步：安装依赖</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> C:\workDoc\blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果报错，参考文末「常见问题」部分。</p>
+</blockquote>
+<h3 id="第-3-步：验证恢复成功"><a href="#第-3-步：验证恢复成功" class="headerlink" title="第 3 步：验证恢复成功"></a>第 3 步：验证恢复成功</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run server</span><br></pre></td></tr></table></figure>
+
+<p>浏览器打开 <code>http://localhost:4000</code>，检查以下内容：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 首页能正常显示</li>
+<li><input disabled="" type="checkbox"> 文章列表正确</li>
+<li><input disabled="" type="checkbox"> 图片加载正常</li>
+<li><input disabled="" type="checkbox"> About &#x2F; Categories &#x2F; Tags 页面正常</li>
+<li><input disabled="" type="checkbox"> 搜索功能正常</li>
+</ul>
+<h3 id="第-4-步：部署测试"><a href="#第-4-步：部署测试" class="headerlink" title="第 4 步：部署测试"></a>第 4 步：部署测试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run clean &amp;&amp; npm run deploy</span><br></pre></td></tr></table></figure>
+
+<p>如果部署成功，说明 Git 和 GitHub 认证都没问题。</p>
+<hr>
+<h2 id="五、SSH-Key-配置（可选）"><a href="#五、SSH-Key-配置（可选）" class="headerlink" title="五、SSH Key 配置（可选）"></a>五、SSH Key 配置（可选）</h2><p>如果你用 SSH 方式连接 GitHub，新设备需要重新生成 SSH Key：</p>
+<h3 id="生成新的-SSH-Key"><a href="#生成新的-SSH-Key" class="headerlink" title="生成新的 SSH Key"></a>生成新的 SSH Key</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;你的 GitHub 邮箱&quot;</span></span><br><span class="line"><span class="comment"># 一路回车，使用默认路径</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="复制公钥"><a href="#复制公钥" class="headerlink" title="复制公钥"></a>复制公钥</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> ~/.ssh/id_ed25519.pub</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加到-GitHub"><a href="#添加到-GitHub" class="headerlink" title="添加到 GitHub"></a>添加到 GitHub</h3><ol>
+<li>打开 <a target="_blank" rel="noopener" href="https://github.com/settings/keys">https://github.com/settings/keys</a></li>
+<li>点击 <strong>New SSH Key</strong></li>
+<li>粘贴公钥内容</li>
+<li>保存</li>
+</ol>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br><span class="line"><span class="comment"># 应输出: Hi xxx! You&#x27;ve successfully authenticated...</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、npm-环境配置说明"><a href="#六、npm-环境配置说明" class="headerlink" title="六、npm 环境配置说明"></a>六、npm 环境配置说明</h2><p>npm 的配置通过 <code>.npmrc</code> 文件管理，位置在用户目录下：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># C:\Users\&lt;用户名&gt;\.npmrc</span></span><br><span class="line"><span class="attr">registry</span>=https://registry.npmmirror.com</span><br><span class="line"><span class="attr">prefix</span>=C:\Users\&lt;用户名&gt;\.npm_global</span><br><span class="line"><span class="attr">cache</span>=C:\Users\&lt;用户名&gt;\.npm_cache</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>含义</th>
+<th>建议值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>registry</code></td>
+<td>包下载源</td>
+<td>国内用 <code>https://registry.npmmirror.com</code></td>
+</tr>
+<tr>
+<td><code>prefix</code></td>
+<td>全局包安装位置</td>
+<td>默认即可</td>
+</tr>
+<tr>
+<td><code>cache</code></td>
+<td>缓存目录</td>
+<td>默认即可</td>
+</tr>
+</tbody></table>
+<p>新设备上执行一条命令即可完成配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npmmirror.com</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、完整环境检查清单"><a href="#七、完整环境检查清单" class="headerlink" title="七、完整环境检查清单"></a>七、完整环境检查清单</h2><table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>命令</th>
+<th>预期结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Node.js 已安装</td>
+<td><code>node -v</code></td>
+<td>v22.x.x 或 v26.x.x</td>
+</tr>
+<tr>
+<td>npm 已安装</td>
+<td><code>npm -v</code></td>
+<td>10.x.x 或更高</td>
+</tr>
+<tr>
+<td>Git 已安装</td>
+<td><code>git -v</code></td>
+<td>2.x.x</td>
+</tr>
+<tr>
+<td>Git 用户已配置</td>
+<td><code>git config --global user.name</code></td>
+<td>输出你的用户名</td>
+</tr>
+<tr>
+<td>npm 镜像已配置</td>
+<td><code>npm config get registry</code></td>
+<td><code>https://registry.npmmirror.com</code></td>
+</tr>
+<tr>
+<td>博客目录存在</td>
+<td><code>ls C:\workDoc\blog</code></td>
+<td>显示配置文件</td>
+</tr>
+<tr>
+<td>依赖已安装</td>
+<td><code>ls C:\workDoc\blog\node_modules</code></td>
+<td>有内容</td>
+</tr>
+<tr>
+<td>本地预览正常</td>
+<td><code>npm run server</code></td>
+<td><code>http://localhost:4000</code> 可访问</td>
+</tr>
+<tr>
+<td>部署正常</td>
+<td><code>npm run deploy</code></td>
+<td>推送成功</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="八、常见问题"><a href="#八、常见问题" class="headerlink" title="八、常见问题"></a>八、常见问题</h2><h3 id="Q1-npm-install-报错"><a href="#Q1-npm-install-报错" class="headerlink" title="Q1: npm install 报错"></a>Q1: <code>npm install</code> 报错</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 清缓存重试</span></span><br><span class="line">npm cache clean --force</span><br><span class="line"><span class="built_in">rm</span> -rf node_modules</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<h3 id="Q2-部署时提示认证失败"><a href="#Q2-部署时提示认证失败" class="headerlink" title="Q2: 部署时提示认证失败"></a>Q2: 部署时提示认证失败</h3><p>检查 Git 用户配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name</span><br><span class="line">git config --global user.email</span><br></pre></td></tr></table></figure>
+
+<p>如果使用 HTTPS 推送，可能需要重新登录 GitHub。</p>
+<h3 id="Q3-端口-4000-被占用"><a href="#Q3-端口-4000-被占用" class="headerlink" title="Q3: 端口 4000 被占用"></a>Q3: 端口 4000 被占用</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx hexo server -p 4001   <span class="comment"># 换个端口</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Q4-图片、头像不显示"><a href="#Q4-图片、头像不显示" class="headerlink" title="Q4: 图片、头像不显示"></a>Q4: 图片、头像不显示</h3><p>检查 <code>_config.butterfly.yml</code> 中的图片路径是否以 <code>/img/</code> 开头：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">avatar:</span></span><br><span class="line">  <span class="attr">img:</span> <span class="string">/img/OIP.jpg</span>      <span class="comment"># ✅ 正确（/开头）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># img: OIP.jpg           # ❌ 错误（缺少/开头）</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Q5-Giscus-评论不显示"><a href="#Q5-Giscus-评论不显示" class="headerlink" title="Q5: Giscus 评论不显示"></a>Q5: Giscus 评论不显示</h3><p>正常现象。Giscus 只在 <code>hl-1.github.io</code> 域名下工作，本地 <code>localhost</code> 不支持。部署到线上就能看到。</p>
+<hr>
+<h2 id="九、迁移文件清单（照单打包）"><a href="#九、迁移文件清单（照单打包）" class="headerlink" title="九、迁移文件清单（照单打包）"></a>九、迁移文件清单（照单打包）</h2><p>直接复制这个列表，打包时逐一核对：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">☐ _config.yml</span><br><span class="line">☐ _config.butterfly.yml</span><br><span class="line">☐ package.json</span><br><span class="line">☐ package-lock.json</span><br><span class="line">☐ .gitignore</span><br><span class="line">☐ scaffolds/draft.md</span><br><span class="line">☐ scaffolds/page.md</span><br><span class="line">☐ scaffolds/post.md</span><br><span class="line">☐ source/_posts/*.md          （所有文章）</span><br><span class="line">☐ source/about/index.md</span><br><span class="line">☐ source/categories/index.md</span><br><span class="line">☐ source/tags/index.md</span><br><span class="line">☐ source/img/*                 （所有图片）</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>迁移的本质就三步：</p>
+<ol>
+<li><strong>打包源文件</strong> → 几百 KB，几秒钟</li>
+<li><strong>新设备装 Node.js + Git</strong> → 一次性操作</li>
+<li><strong>npm install + npm run deploy</strong> → 两条命令恢复</li>
+</ol>
+<p>数据（文章评论、GitHub 仓库、部署历史）都在 GitHub 云端，不会因为换设备而丢失。</p>
+<hr>
+<p>最后更新：2026-06-25</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://hl-1.github.io">入机</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://hl-1.github.io/2026/06/25/hexo-blog-%E8%BF%81%E7%A7%BB%E6%8C%87%E5%8D%97/">https://hl-1.github.io/2026/06/25/hexo-blog-%E8%BF%81%E7%A7%BB%E6%8C%87%E5%8D%97/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://hl-1.github.io" target="_blank">入机1号</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Hexo/">Hexo</a><a class="post-meta__tags" href="/tags/%E6%95%99%E7%A8%8B/">教程</a><a class="post-meta__tags" href="/tags/%E8%BF%81%E7%A7%BB/">迁移</a><a class="post-meta__tags" href="/tags/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">环境配置</a></div><div class="post-share"><div class="social-share" data-image="/img/OIP.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/06/25/hexo-blog-github-pages-%E6%90%AD%E5%BB%BA%E5%85%A8%E6%8C%87%E5%8D%97/" title="Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）</div></div><div class="info-2"><div class="info-item-1">Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）概述本指南记录从零开始搭建 Hexo 静态博客并部署到 GitHub Pages 的完整过程，附带所有遇到的问题与解决方案。  最终站点： https://hl-1.github.io 博客目录： C:\workDoc\blog 主题： Butterfly 部署方式： GitHub Pages（免费）   ⚠️ 阅读前提：命令在哪儿执行？本文所有命令都在 Windows 终端 中执行。打开方式：  cmd： Win + R → 输入 cmd → 回车 PowerShell： Win + R → 输入 powershell → 回车 Git Bash： Win + R → 输入 bash → 回车（需先安装 Git）  三种终端都能用，命令完全一样，选哪个都行。下文所有以 $ 或 &gt; 开头的命令都在这类终端窗口中输入。  环境信息   项目 版本    操作系统 Windows 10 Home 10.0.19045   Node.js v26.3.1   npm 11.17.0   Hexo 5.5....</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/06/25/hexo-%E5%8D%9A%E5%AE%A2%E6%97%A5%E5%B8%B8%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/" title="Hexo 博客日常操作指南（增删改 + 图片）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-25</div><div class="info-item-2">Hexo 博客日常操作指南（增删改 + 图片）</div></div><div class="info-2"><div class="info-item-1">Hexo 博客日常操作指南⚠️ 前置说明所有命令都在 Windows 本地 cmd 中执行。打开方式：Win + R → cmd → 回车。 12# 所有操作前先进入博客目录cd C:\workDoc\blog   一、上传新文章到博客步骤12345678# ① 新建文章（自动生成 md 文件）npx hexo new &quot;文章标题&quot;# ② 文件位置：source\_posts\文章标题.md#    用任意编辑器打开，写 Markdown 内容# ③ 部署上线npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy  示例12345npx hexo new &quot;我的学习笔记&quot;# → 生成 source\_posts\我的学习笔记.md# → 编辑内容...npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy# → 1-2 分钟后在 https://hl-1.github.i...</div></div></div></a><a class="pagination-related" href="/2026/06/25/hexo-blog-github-pages-%E6%90%AD%E5%BB%BA%E5%85%A8%E6%8C%87%E5%8D%97/" title="Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-25</div><div class="info-item-2">Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）</div></div><div class="info-2"><div class="info-item-1">Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）概述本指南记录从零开始搭建 Hexo 静态博客并部署到 GitHub Pages 的完整过程，附带所有遇到的问题与解决方案。  最终站点： https://hl-1.github.io 博客目录： C:\workDoc\blog 主题： Butterfly 部署方式： GitHub Pages（免费）   ⚠️ 阅读前提：命令在哪儿执行？本文所有命令都在 Windows 终端 中执行。打开方式：  cmd： Win + R → 输入 cmd → 回车 PowerShell： Win + R → 输入 powershell → 回车 Git Bash： Win + R → 输入 bash → 回车（需先安装 Git）  三种终端都能用，命令完全一样，选哪个都行。下文所有以 $ 或 &gt; 开头的命令都在这类终端窗口中输入。  环境信息   项目 版本    操作系统 Windows 10 Home 10.0.19045   Node.js v26.3.1   npm 11.17.0   Hexo 5.5....</div></div></div></a><a class="pagination-related" href="/2026/06/25/Hello-World-0/" title="Hello World"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-25</div><div class="info-item-2">Hello World</div></div><div class="info-2"><div class="info-item-1">入机1号，正式启航 🚀这是我的第一篇博客文章，标志着我个人技术博客的正式上线。 技术栈本站使用以下技术搭建：  Hexo - 快速、简洁的静态博客框架 Butterfly - 美观大方的 Hexo 主题 GitHub Pages - 免费静态网站托管  计划后续会陆续分享更多技术文章，敬请期待！ </div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/OIP.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">入机</div><div class="author-info-description">个人技术博客</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/hl-1"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/hl-1" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1187119802@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7bea;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hexo-%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB%E6%8C%87%E5%8D%97%EF%BC%88%E6%8D%A2%E8%AE%BE%E5%A4%87-%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">Hexo 个人博客迁移指南（换设备 &#x2F; 重装系统）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%BF%81%E7%A7%BB%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">一、迁移原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%9C%80%E8%A6%81%E6%89%93%E5%8C%85%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">二、需要打包的文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%93%E5%8C%85%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.1.</span> <span class="toc-text">打包方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%96%B0%E8%AE%BE%E5%A4%87%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">1.4.</span> <span class="toc-text">三、新设备环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85-Node-js"><span class="toc-number">1.4.1.</span> <span class="toc-text">1. 安装 Node.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85-Git"><span class="toc-number">1.4.2.</span> <span class="toc-text">2. 安装 Git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE-Git-%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="toc-number">1.4.3.</span> <span class="toc-text">3. 配置 Git 用户信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%85%8D%E7%BD%AE-npm-%E9%95%9C%E5%83%8F%EF%BC%88%E5%9B%BD%E5%86%85%E7%94%A8%E6%88%B7%EF%BC%89"><span class="toc-number">1.4.4.</span> <span class="toc-text">4. 配置 npm 镜像（国内用户）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%81%A2%E5%A4%8D%E5%8D%9A%E5%AE%A2"><span class="toc-number">1.5.</span> <span class="toc-text">四、恢复博客</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC-1-%E6%AD%A5%EF%BC%9A%E6%94%BE%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.5.1.</span> <span class="toc-text">第 1 步：放置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC-2-%E6%AD%A5%EF%BC%9A%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="toc-number">1.5.2.</span> <span class="toc-text">第 2 步：安装依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC-3-%E6%AD%A5%EF%BC%9A%E9%AA%8C%E8%AF%81%E6%81%A2%E5%A4%8D%E6%88%90%E5%8A%9F"><span class="toc-number">1.5.3.</span> <span class="toc-text">第 3 步：验证恢复成功</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC-4-%E6%AD%A5%EF%BC%9A%E9%83%A8%E7%BD%B2%E6%B5%8B%E8%AF%95"><span class="toc-number">1.5.4.</span> <span class="toc-text">第 4 步：部署测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81SSH-Key-%E9%85%8D%E7%BD%AE%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">五、SSH Key 配置（可选）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E6%96%B0%E7%9A%84-SSH-Key"><span class="toc-number">1.6.1.</span> <span class="toc-text">生成新的 SSH Key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E5%85%AC%E9%92%A5"><span class="toc-number">1.6.2.</span> <span class="toc-text">复制公钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%88%B0-GitHub"><span class="toc-number">1.6.3.</span> <span class="toc-text">添加到 GitHub</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81"><span class="toc-number">1.6.4.</span> <span class="toc-text">验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81npm-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E"><span class="toc-number">1.7.</span> <span class="toc-text">六、npm 环境配置说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%AE%8C%E6%95%B4%E7%8E%AF%E5%A2%83%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="toc-number">1.8.</span> <span class="toc-text">七、完整环境检查清单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">1.9.</span> <span class="toc-text">八、常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Q1-npm-install-%E6%8A%A5%E9%94%99"><span class="toc-number">1.9.1.</span> <span class="toc-text">Q1: npm install 报错</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q2-%E9%83%A8%E7%BD%B2%E6%97%B6%E6%8F%90%E7%A4%BA%E8%AE%A4%E8%AF%81%E5%A4%B1%E8%B4%A5"><span class="toc-number">1.9.2.</span> <span class="toc-text">Q2: 部署时提示认证失败</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q3-%E7%AB%AF%E5%8F%A3-4000-%E8%A2%AB%E5%8D%A0%E7%94%A8"><span class="toc-number">1.9.3.</span> <span class="toc-text">Q3: 端口 4000 被占用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q4-%E5%9B%BE%E7%89%87%E3%80%81%E5%A4%B4%E5%83%8F%E4%B8%8D%E6%98%BE%E7%A4%BA"><span class="toc-number">1.9.4.</span> <span class="toc-text">Q4: 图片、头像不显示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q5-Giscus-%E8%AF%84%E8%AE%BA%E4%B8%8D%E6%98%BE%E7%A4%BA"><span class="toc-number">1.9.5.</span> <span class="toc-text">Q5: Giscus 评论不显示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E8%BF%81%E7%A7%BB%E6%96%87%E4%BB%B6%E6%B8%85%E5%8D%95%EF%BC%88%E7%85%A7%E5%8D%95%E6%89%93%E5%8C%85%EF%BC%89"><span class="toc-number">1.10.</span> <span class="toc-text">九、迁移文件清单（照单打包）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.11.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/25/hexo-blog-%E8%BF%81%E7%A7%BB%E6%8C%87%E5%8D%97/" title="Hexo 个人博客迁移指南（换设备 / 重装系统）">Hexo 个人博客迁移指南（换设备 / 重装系统）</a><time datetime="2026-06-25T04:15:00.000Z" title="发表于 2026-06-25 12:15:00">2026-06-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/25/hexo-blog-github-pages-%E6%90%AD%E5%BB%BA%E5%85%A8%E6%8C%87%E5%8D%97/" title="Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）">Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）</a><time datetime="2026-06-25T03:30:00.000Z" title="发表于 2026-06-25 11:30:00">2026-06-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/25/hexo-%E5%8D%9A%E5%AE%A2%E6%97%A5%E5%B8%B8%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/" title="Hexo 博客日常操作指南（增删改 + 图片）">Hexo 博客日常操作指南（增删改 + 图片）</a><time datetime="2026-06-25T02:15:00.000Z" title="发表于 2026-06-25 10:15:00">2026-06-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/06/25/Hello-World-0/" title="Hello World">Hello World</a><time datetime="2026-06-25T01:21:59.000Z" title="发表于 2026-06-25 09:21:59">2026-06-25</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 入机</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.5"></script><script src="/js/main.js?v=5.5.5"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'hl-1/hl-1.github.io',
+      'data-repo-id': 'R_kgDOTDtHFQ',
+      'data-category-id': 'DIC_kwDOTDtHFc4C_12D',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.5"></script></div></div></body></html>
