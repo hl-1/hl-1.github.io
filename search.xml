@@ -340,9 +340,9 @@ npm install + npm run deploy → 两条命令恢复
       </tags>
   </entry>
   <entry>
-    <title></title>
+    <title>Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）</title>
     <url>/2026/06/25/hexo-blog-github-pages-%E6%90%AD%E5%BB%BA%E5%85%A8%E6%8C%87%E5%8D%97/</url>
-    <content><![CDATA[Hexo + GitHub Pages 个人博客搭建全指南（从 0 到 1）概述本指南记录从零开始搭建 Hexo 静态博客并部署到 GitHub Pages 的完整过程，附带所有遇到的问题与解决方案。
+    <content><![CDATA[概述本指南记录从零开始搭建 Hexo 静态博客并部署到 GitHub Pages 的完整过程，附带所有遇到的问题与解决方案。
 
 最终站点： https://hl-1.github.io
 博客目录： C:\workDoc\blog
@@ -677,5 +677,11 @@ Deploy → hexo deploy 推上线
 
 最后更新：2026-06-25
 ]]></content>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>教程</tag>
+        <tag>GitHub Pages</tag>
+        <tag>博客</tag>
+      </tags>
   </entry>
 </search>
